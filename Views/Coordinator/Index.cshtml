@@ -1,0 +1,190 @@
+﻿@model List<RescueRoute.Models.EmergencyRequest>
+
+@{
+    ViewData["Title"] = "Coordinator Dashboard";
+
+    var pending = Model.Count(r => r.Status == "Pending Review");
+    var awaiting = Model.Count(r => r.Status == "Under Review");
+    var assigned = Model.Count(r => r.Status == "Volunteer Assigned");
+}
+
+<section class="bg-primary text-white py-5">
+    <div class="container py-4">
+        <span class="badge text-bg-warning mb-3">
+            Coordinator Portal
+        </span>
+
+        <h1 class="display-5 fw-bold">
+            Organize a timely response
+        </h1>
+
+        <p class="lead col-lg-8">
+            Review incoming requests, match suitable volunteers
+            and monitor coordination progress.
+        </p>
+    </div>
+</section>
+
+<main class="container py-5">
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    <!-- Statistics -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="display-6 fw-bold text-primary">
+                        @pending
+                    </div>
+                    <div class="text-secondary">
+                        Pending Review
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="display-6 fw-bold text-primary">
+                        @awaiting
+                    </div>
+                    <div class="text-secondary">
+                        Under Review
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="display-6 fw-bold text-primary">
+                        @assigned
+                    </div>
+                    <div class="text-secondary">
+                        Volunteer Assigned
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Priority Request Queue -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+
+            <h2 class="h4 mb-3">
+                Priority Request Queue
+            </h2>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle bg-white">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th>Request</th>
+                            <th>Location</th>
+                            <th>Type</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Update Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var request in Model)
+                        {
+                            <tr>
+                                <td>RR-@request.Id</td>
+
+                                <td>@request.Location</td>
+
+                                <td>@request.AssistanceNeeded</td>
+
+                                <td>
+                                    <span class="badge @(request.Urgency == "Critical" ? "text-bg-danger" : request.Urgency == "High" ? "text-bg-warning" : "text-bg-info")">
+                                        @request.Urgency
+                                    </span>
+                                </td>
+
+                                <td>@request.Status</td>
+
+                                <td>
+                                    <form asp-controller="Coordinator"
+                                          asp-action="UpdateStatus"
+                                          method="post"
+                                          class="d-flex gap-2">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@request.Id" />
+
+                                        <select name="status"
+                                                class="form-select form-select-sm">
+
+                                            <option value="Pending Review"
+                                                    selected="@(request.Status == "Pending Review")">
+                                                Pending Review
+                                            </option>
+
+                                            <option value="Under Review"
+                                                    selected="@(request.Status == "Under Review")">
+                                                Under Review
+                                            </option>
+
+                                            <option value="Volunteer Assigned"
+                                                    selected="@(request.Status == "Volunteer Assigned")">
+                                                Volunteer Assigned
+                                            </option>
+
+                                            <option value="Completed"
+                                                    selected="@(request.Status == "Completed")">
+                                                Completed
+                                            </option>
+
+                                        </select>
+
+                                        <button type="submit"
+                                                class="btn btn-primary btn-sm">
+                                            Save
+                                        </button>
+
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="6"
+                                    class="text-center text-secondary py-4">
+                                    No emergency requests available.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div class="alert alert-info mb-0">
+                Requests and statuses are loaded from the database.
+                Volunteer assignment is not implemented yet.
+            </div>
+
+        </div>
+    </div>
+
+</main>

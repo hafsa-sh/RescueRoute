@@ -1,0 +1,134 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<section class="bg-primary text-white py-5">
+    <div class="container py-4">
+
+        <span class="badge text-bg-warning mb-3">
+            Emergency Resource Coordination
+        </span>
+
+        <h1 class="display-5 fw-bold">
+            Connecting help when it matters most
+        </h1>
+
+        <p class="lead col-lg-8">
+            A community-focused platform for coordinating
+            emergency requests, volunteers, and available resources.
+        </p>
+
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <a asp-controller="Dashboard"
+               asp-action="Index"
+               class="btn btn-warning fw-semibold mt-3">
+                Go to My Dashboard
+            </a>
+        }
+        else
+        {
+            <a asp-area="Identity"
+               asp-page="/Account/Register"
+               class="btn btn-warning fw-semibold mt-3">
+                Get Started
+            </a>
+        }
+
+    </div>
+</section>
+
+<main class="container py-5">
+
+    <div class="row g-3 mb-5">
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h3 class="h5 fw-bold">
+                        Request Assistance
+                    </h3>
+
+                    <p class="text-secondary mb-0">
+                        Describe the type of assistance,
+                        location and urgency of an emergency request.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h3 class="h5 fw-bold">
+                        Volunteer Support
+                    </h3>
+
+                    <p class="text-secondary mb-0">
+                        Make available skills and resources
+                        visible to coordinators.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h3 class="h5 fw-bold">
+                        Coordinate Response
+                    </h3>
+
+                    <p class="text-secondary mb-0">
+                        Review priorities, match resources
+                        and follow progress in one place.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="bg-white rounded-4 shadow-sm p-4 p-md-5">
+
+        <h2 class="h3 fw-bold">
+            How RescueRoute Works
+        </h2>
+
+        <p class="text-secondary">
+            Request → Review → Assign → Respond → Confirm
+        </p>
+
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <a asp-controller="Dashboard"
+               asp-action="Index"
+               class="btn btn-primary">
+                Open Dashboard
+            </a>
+        }
+        else
+        {
+            <a asp-area="Identity"
+               asp-page="/Account/Register"
+               class="btn btn-primary me-2">
+                Get Started
+            </a>
+
+            <a asp-area="Identity"
+               asp-page="/Account/Login"
+               class="btn btn-outline-primary">
+                Login
+            </a>
+        }
+
+    </div>
+
+    <div class="alert alert-warning mt-4">
+        RescueRoute is an academic demonstration,
+        not a live emergency response service.
+        In a real emergency, contact local emergency services.
+    </div>
+
+</main>
+

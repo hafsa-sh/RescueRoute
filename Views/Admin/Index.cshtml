@@ -1,0 +1,161 @@
+﻿@model List<RescueRoute.Controllers.AdminUserViewModel>
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<section class="bg-primary text-white py-5">
+    <div class="container py-4">
+
+        <span class="badge text-bg-warning mb-3">
+            Administrator Portal
+        </span>
+
+        <h1 class="display-5 fw-bold">
+            Platform Overview
+        </h1>
+
+        <p class="lead col-lg-8">
+            Manage the RescueRoute community and monitor
+            resource coordination activities.
+        </p>
+
+    </div>
+</section>
+
+<main class="container py-5">
+
+    <!-- Dynamic Statistics -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="display-6 fw-bold text-primary">
+                        @ViewBag.TotalUsers
+                    </div>
+                    <div class="text-secondary">
+                        Registered Users
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="display-6 fw-bold text-primary">
+                        @ViewBag.TotalVolunteers
+                    </div>
+                    <div class="text-secondary">
+                        Registered Volunteers
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="display-6 fw-bold text-primary">
+                        @ViewBag.OpenRequests
+                    </div>
+                    <div class="text-secondary">
+                        Open Requests
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Dynamic User Overview -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+
+                    <h2 class="h4 mb-3">
+                        User Overview
+                    </h2>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle bg-white">
+
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var user in Model)
+                                {
+                                    <tr>
+                                        <td>@user.Email</td>
+                                        <td>@user.Role</td>
+                                        <td>
+                                            <span class="badge @(user.Status == "Active" ? "text-bg-success" : "text-bg-danger")">
+                                                @user.Status
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+
+                                @if (!Model.Any())
+                                {
+                                    <tr>
+                                        <td colspan="3"
+                                            class="text-center text-secondary py-4">
+                                            No registered users found.
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Administrative Modules -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+
+                    <h2 class="h5 mb-3">
+                        Administrative Modules
+                    </h2>
+
+                    <div class="list-group">
+                        <span class="list-group-item">
+                            User Management
+                        </span>
+                        <span class="list-group-item">
+                            Volunteer Verification
+                        </span>
+                        <span class="list-group-item">
+                            Resource Categories
+                        </span>
+                        <span class="list-group-item">
+                            Activity Reports
+                        </span>
+                    </div>
+
+                    <p class="text-secondary small mt-3 mb-0">
+                        User statistics are loaded from the database.
+                        Administrative modules are visual placeholders.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</main>

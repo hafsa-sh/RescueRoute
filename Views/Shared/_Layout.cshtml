@@ -1,0 +1,97 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>@ViewData["Title"] | RescueRoute</title>
+
+    <!-- Bootstrap CSS Only -->
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+          asp-append-version="true" />
+</head>
+
+<body class="bg-light text-dark">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+
+            <a class="navbar-brand fw-bold"
+               asp-area=""
+               asp-controller="Home"
+               asp-action="Index">
+                ✚ RescueRoute
+            </a>
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#mainNavbar"
+                    aria-controls="mainNavbar"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNavbar">
+
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                    <li class="nav-item">
+                        <a class="nav-link text-white"
+                           asp-area=""
+                           asp-controller="Home"
+                           asp-action="Index">
+                            Home
+                        </a>
+                    </li>
+
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-white"
+                               asp-area=""
+                               asp-controller="Dashboard"
+                               asp-action="Index">
+                                My Dashboard
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+
+                <div class="ms-lg-3">
+                    <partial name="_LoginPartial" />
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    @RenderBody()
+
+    <!-- Footer -->
+    <footer class="border-top bg-white py-4 mt-5">
+        <div class="container d-flex justify-content-between flex-wrap gap-2">
+            <span class="fw-semibold text-primary">
+                ✚ RescueRoute
+            </span>
+
+            <span class="text-secondary small">
+                Academic demonstration • Not an emergency service
+            </span>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Only -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
+            asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

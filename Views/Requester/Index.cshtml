@@ -1,0 +1,223 @@
+﻿@model List<RescueRoute.Models.EmergencyRequest>
+
+@{
+    ViewData["Title"] = "Requester Dashboard";
+    var active = Model.Count(r => r.Status != "Completed");
+    var completed = Model.Count(r => r.Status == "Completed");
+}
+
+<section class="bg-primary text-white py-5">
+    <div class="container py-4">
+        <span class="badge text-bg-warning mb-3">
+            Requester Portal
+        </span>
+
+        <h1 class="display-5 fw-bold">
+            Request help, stay informed
+        </h1>
+
+        <p class="lead col-lg-8">
+            Submit emergency requests and track their progress.
+        </p>
+    </div>
+</section>
+
+<main class="container py-5">
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    <!-- Statistics -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="display-6 fw-bold text-primary">
+                        @active
+                    </div>
+                    <div class="text-secondary">
+                        Active Requests
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="display-6 fw-bold text-primary">
+                        @completed
+                    </div>
+                    <div class="text-secondary">
+                        Completed Requests
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="display-6 fw-bold text-primary">
+                        @Model.Count
+                    </div>
+                    <div class="text-secondary">
+                        Total Requests
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-4">
+
+        <!-- New Emergency Request Form -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+
+                    <h2 class="h4 mb-3">
+                        New Emergency Request
+                    </h2>
+
+                    <form asp-controller="Requester"
+                          asp-action="Create"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <label class="form-label">
+                            Assistance Needed
+                        </label>
+
+                        <select name="assistanceNeeded"
+                                class="form-select" required>
+                            <option value="Medical supplies">
+                                Medical supplies
+                            </option>
+                            <option value="Food and water">
+                                Food and water
+                            </option>
+                            <option value="Temporary shelter">
+                                Temporary shelter
+                            </option>
+                            <option value="Transport">
+                                Transport
+                            </option>
+                        </select>
+
+                        <label class="form-label mt-3">
+                            Location
+                        </label>
+
+                        <input name="location"
+                               class="form-control"
+                               placeholder="Area / city"
+                               maxlength="150"
+                               required />
+
+                        <label class="form-label mt-3">
+                            Urgency
+                        </label>
+
+                        <select name="urgency"
+                                class="form-select" required>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                            <option value="Critical">Critical</option>
+                        </select>
+
+                        <label class="form-label mt-3">
+                            Details
+                        </label>
+
+                        <textarea name="details"
+                                  class="form-control"
+                                  rows="3"
+                                  maxlength="1000"
+                                  placeholder="Describe the situation"
+                                  required></textarea>
+
+                        <button type="submit"
+                                class="btn btn-primary mt-3">
+                            Submit Request
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Requests Table -->
+        <div class="col-lg-7">
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+
+                    <h2 class="h4 mb-3">
+                        My Requests
+                    </h2>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle bg-white">
+
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Need</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var request in Model)
+                                {
+                                    <tr>
+                                        <td>RR-@request.Id</td>
+                                        <td>@request.AssistanceNeeded</td>
+                                        <td>
+                                            <span class="badge @(request.Urgency == "Critical" ? "text-bg-danger" : request.Urgency == "High" ? "text-bg-warning" : "text-bg-info")">
+                                                @request.Urgency
+                                            </span>
+                                        </td>
+                                        <td>@request.Status</td>
+                                    </tr>
+                                }
+
+                                @if (!Model.Any())
+                                {
+                                    <tr>
+                                        <td colspan="4"
+                                            class="text-center text-secondary py-4">
+                                            No requests submitted yet.
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</main>

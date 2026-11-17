@@ -1,0 +1,154 @@
+﻿@model List<RescueRoute.Models.EmergencyRequest>
+
+@{
+    ViewData["Title"] = "Volunteer Dashboard";
+    var assigned = Model.Count(r => r.Status == "Volunteer Assigned");
+}
+
+<section class="bg-primary text-white py-5">
+    <div class="container py-4">
+        <span class="badge text-bg-warning mb-3">
+            Volunteer Portal
+        </span>
+        <h1 class="display-5 fw-bold">
+            Be ready to make a difference
+        </h1>
+        <p class="lead col-lg-8">
+            Explore nearby assistance requests and see where
+            your support could make an impact.
+        </p>
+    </div>
+</section>
+
+<main class="container py-5">
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="display-6 fw-bold text-primary">
+                        @Model.Count
+                    </div>
+                    <div class="text-secondary">
+                        Open Requests
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="display-6 fw-bold text-primary">
+                        @assigned
+                    </div>
+                    <div class="text-secondary">
+                        Requests Marked Assigned
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="display-6 fw-bold text-primary">
+                        24/7
+                    </div>
+                    <div class="text-secondary">
+                        Platform Concept
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+
+                    <h2 class="h4 mb-3">
+                        Assistance Requests
+                    </h2>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Request</th>
+                                    <th>Location</th>
+                                    <th>Type</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var request in Model)
+                                {
+                                    <tr>
+                                        <td>RR-@request.Id</td>
+                                        <td>@request.Location</td>
+                                        <td>@request.AssistanceNeeded</td>
+                                        <td>
+                                            <span class="badge @(request.Urgency == "Critical" ? "text-bg-danger" : request.Urgency == "High" ? "text-bg-warning" : "text-bg-info")">
+                                                @request.Urgency
+                                            </span>
+                                        </td>
+                                        <td>@request.Status</td>
+                                    </tr>
+                                }
+
+                                @if (!Model.Any())
+                                {
+                                    <tr>
+                                        <td colspan="5"
+                                            class="text-center text-secondary py-4">
+                                            No open requests available.
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="h5">My Availability</h2>
+
+                    <label class="form-label mt-2">
+                        Availability Status
+                    </label>
+                    <select class="form-select" disabled>
+                        <option>Available</option>
+                    </select>
+
+                    <label class="form-label mt-3">
+                        Resources I Can Offer
+                    </label>
+                    <input class="form-control"
+                           value="Transport, water"
+                           readonly />
+
+                    <button class="btn btn-primary mt-3" disabled>
+                        Update (Demo Only)
+                    </button>
+
+                    <p class="text-secondary small mt-3 mb-0">
+                        Availability management is a visual demo.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+
